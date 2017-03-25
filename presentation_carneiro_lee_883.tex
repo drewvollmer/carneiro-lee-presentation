@@ -1,0 +1,99 @@
+% presentation_carneiro_lee_883.tex
+% 20-30 minute presentation on Carneiro and Lee (2009)
+% Jackson Bunting; Drew Vollmer 03-25-2017
+
+\documentclass{beamer}
+
+\usepackage{amsfonts} % For \mathbb command
+\usepackage{amsmath} % for align
+\usepackage{graphicx} % for graphics
+
+
+\allowdisplaybreaks % so that aligned equations can be broken across pages
+\newcommand{\E}{\mathrm{E}} % Expectation operator
+\newcommand{\Var}{\mathrm{Var}} % Variance operator
+\mathchardef\mhyphen="2D % Create a hyphen for math mode
+\newcommand*\diff{\mathop{}\!d} % nicely formatted integral dx
+
+\usetheme{madrid}
+
+\begin{document}
+
+
+
+\title[Distributions of Potential Outcomes]{Estimating Distributions
+  of Potential Outcomes Using Local Instrumental Variables}
+\subtitle{Carneiro and Lee, Journal of Econometrics (2009)}
+\author[]{Jackson Bunting and Drew Vollmer}
+\frame{\maketitle}
+
+
+\begin{frame}{Overview}
+
+% Nontechnical overview of big ideas
+
+\end{frame}
+
+
+\begin{frame}{Econometric Model} % Or framework, whichever is appropriate
+
+  % Show the outcome model and state that it is the same as the one in
+  % our MTE lecture.
+
+  % Mention a few assumptions, but only the ones that we will directly
+  % invoke (refer back to MTE lecture for others)
+
+\end{frame}
+
+
+% Context for theorem 1: essential background on the MTE and local
+% instrumental variables to put the result in context
+\begin{frame}{Identification Context}
+\end{frame}
+
+
+% Shrink to make the math type just a bit smaller
+\begin{frame}[shrink = 1]{Key Identification Result}
+
+\begin{theorem}
+  Under the potential outcomes framework, selection equation, and
+  technical assumptions,
+
+\vspace{-.25cm}
+\begin{align*}
+  \E\left[ G(Y_1) | X = x, U_D = p \right] = &\E \left[ G(Y) | X = x, \mu_D(Z) = p, D = 1 \right] \\
+  &+ p \frac{\partial \E\left[ G(Y) | X = x, \mu_D(Z) = p, S = 1 \right]}{\partial p} \\
+  \E\left[ G(Y_0) | X = x, U_D = p \right] = &\E \left[ G(Y) | X = x, \mu_D(Z) = p, D = 0 \right] \\
+  &- (1 - p) \frac{\partial \E\left[ G(Y) | X = x, \mu_D(Z) = p, S = 0 \right]}{\partial p} \\
+\end{align*}
+\end{theorem}
+
+\end{frame}
+
+
+% Need text a bit smaller, so use the shrink parameter
+\begin{frame}[shrink = 10]{Proof of Theorem}
+
+\begin{proof}
+\[
+\begin{aligned}
+\action<+->{\E [ G(Y) | &X = x, \mu_D(Z) = p, D = 1 ] = \E \left[ G(Y) | X = x, \mu_D(Z) = p, U_D < p \right] \\}
+\action<+->{&= \E \left[ G(Y_1) | X = x, \mu_D(Z) = p, U_D < p \right] = \E \left[ G(Y_1) | X = x, U_D < p \right] \\}
+\action<+->{&= \frac{1}{\Pr(U_D < p)} \int_0^p \E \left[ G(Y_1) | X = x, U_D = u_D \right] f_{U_D | X}(u_D | x) \diff u_D \\}
+\action<+->{&= \frac{1}{p} \int_0^p \E \left[ G(Y_1) | X = x, U_D = u_D \right] \int \underbrace{f_{U_D | X, Z}(u_D | x, z)}_{1} f_{Z|X}(z | x) \diff z \diff u_D \\}
+\action<+->{&= \frac{1}{p} \int_0^p \E \left[ G(Y_1) | X = x, U_D = u_D \right] \diff u_D \\}
+\end{aligned}
+\]
+
+\action<+->{Conclude by differentiating both sides with respect to $p$.}
+
+\end{proof}
+\end{frame}
+
+
+% Explain why the theorem matters
+\begin{frame}{Implications}
+\end{frame}
+
+
+\end{document}
