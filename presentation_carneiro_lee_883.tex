@@ -7,6 +7,7 @@
 \usepackage{amsfonts} % For \mathbb command
 \usepackage{amsmath} % for align
 \usepackage{graphicx} % for graphics
+\usepackage{cancel} % for ...
 
 
 \allowdisplaybreaks % so that aligned equations can be broken across pages
@@ -168,12 +169,189 @@
 
 % Explain why the theorem matters
 \begin{frame}{Implications}
+% So far we have: (1) can get distributions 
 \end{frame}
 
 
 % Construction of treatment effects from theorem 1
 \begin{frame}{Getting Treatment Effects}
 \end{frame}
+
+\begin{frame}{Estimation} 
+Observe $\{Y,S,X,Z\}$ iid. Two objects of interest :
+\begin{enumerate}
+\item Marginal potential outcomes---difference is MTE
+\begin{equation*}
+  \mathrm{E}[Y_1\mid x,U_d=p]
+\end{equation*}
+\item Distribution of marginal potential outcomes
+  \begin{equation*}
+    f_{Y_1\mid X,U_d}(y\mid x,U_d=p)
+  \end{equation*}
+\end{enumerate}
+\begin{itemize}
+\item The second builds on the first
+\item Empirical section is application of suggested estimators [I will
+  delete this, since it should be in overview]
+\end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Estimation: Marginal Potential Outcomes  }
+  \begin{itemize}
+  \item Authors assume structure for $\mu_1$:
+    \begin{equation*}
+      Y_1  = X'\beta_1 +  U_1
+    \end{equation*}
+\item So we wish to estimate:
+    \begin{equation*}
+      \mathrm{E}[Y_1\mid x,U_d=p]  = x'\beta_1 +  \mathrm{E}[U_1\mid x,U_d=p]
+    \end{equation*} 
+\item The two terms are estimated separately
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Estimation:  Marginal Potential Outcomes, $\beta_1$}
+  \begin{itemize}
+\item By the structural form:
+\begin{equation*}
+  \mathrm{E}[Y_1\mid x, p,S=1] = x'\beta_1 +  \mathrm{E}[U_1\mid x,p,
+  S=1   ]
+\end{equation*}
+\item It can be shown $\mathrm{E}[U_1\mid x,p,
+  S=1   ]$ depends only on $p$. Say: 
+  \begin{equation*}
+    \mathrm{E}[Y_1\mid x, p,S=1] = x'\beta_1 +  \lambda_1(p)
+  \end{equation*}
+%%%[The idea is that (z,x) drop out by independence, then Ud drops out
+%%%because its uniform.][Also ind of x not necessary]
+\item If define mean zero errors $\epsilon_i$, this can be written as:
+ \begin{equation*}
+    Y_1 = x'\beta_1 +  \lambda_1(p) + \epsilon
+  \end{equation*}
+%%%[Y=Y1 since we are among S=1]
+\item This is a `Partial Linear Model'! (The terms we care about are linear)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Estimation:  Marginal Potential Outcomes, $\beta_1$}
+  \begin{itemize}
+  \item Robinson (1988) has a estimator for this model
+\item The idea is to
+  `difference' away $\lambda(p)$
+%%%like in panel data:
+  \begin{equation*}
+Y_1 - E[Y_1\mid p] = (x'-E[x\mid p])\beta_1 +  \cancel{\lambda_1(p) - \lambda_1(p)} + \eta
+\end{equation*}
+\item The estimation involves:
+\begin{enumerate}
+\item Estimate $\hat{P}$ non-parametrically 
+%%%[use siepe regression: a power series approximation]
+\item Regress $Y$ on $\hat{p}$ and $X$ on $\hat{p}$, store the fitted values
+\item Then do OLS of $Y - E[Y\mid p]$ on $X -
+   E[X\mid p]$
+\end{enumerate}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Estimation:  Marginal Potential Outcomes }
+  \begin{itemize}
+  \item Now for the second bit: \begin{equation*}
+      \mathrm{E}[Y_1\mid x,U_d=p]  = x'\beta_1 +  \mathbf{\mathrm{\mathbf{E}}[U_1\mid x,U_d=p]}
+    \end{equation*}
+\item Our sample is $\{\hat{U}_1= Y-\mu_1(x,\hat{\beta}_1), \hat{P},
+  S\}$
+\item The ID argument replicates for $U_1$, so 
+\begin{equation*}
+  \mathrm{E}[U_1\mid U_d= p] = p \frac{\partial}{\partial
+    p}\mathrm{E}[U_1\mid P=p,S=1] + \mathrm{E}[U_1\mid P=p,S=1]
+\end{equation*}
+\item We can estimate the RHS with local polynomial regression
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Estimation:  Marginal Potential Outcomes,
+    $\mathrm{E}[U_1\mid U_d=p]$}
+    \begin{itemize}
+  \item LP regression is like LS weighting obserations close to $\hat{P}=p$
+%%% [``locally'']
+\item For example, solve
+  \begin{equation*}
+   \min_{\gamma_1,\gamma_2} \left\{ \sum_i\left[\hat{U}_{1i}-(\gamma_1 +
+      \gamma_2(\hat{P}_i-p))\right]^2\mathrm{1}{\bigl(|\hat{P}_i - p| \le h\bigr)}\right\}
+  \end{equation*}
+%%% [I've told you what it is, now I'll give you motivation]
+\item Why? Think of a taylor series of $E[\hat{U}_{1}|
+ \hat{P}=\hat{P}_i]$
+  about $\hat{P} = p$
+  \begin{equation*}
+    E[\hat{U}_{1}\mid \hat{P}_i] \approx E[\hat{U}_{1}\mid p] +
+    \frac{\partial}{\partial p} E[\hat{U}_{1}\mid p] (\hat{P}_i-p)
+  \end{equation*}
+With equality as $p \rightarrow \hat{P}_i$. This justifies
+interpretation that
+\begin{eqnarray*}
+  \hat{\gamma}_1 = \hat{E}[\hat{U}_{1}\mid p] & & \hat{\gamma}_2 = \frac{\partial}{\partial p} \hat{E}[\hat{U}_{1}\mid p]
+\end{eqnarray*}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Recap:  Marginal Potential Outcomes}
+\begin{enumerate}
+\item Marginal potential outcomes---difference is MTE
+\begin{equation*}
+  \mathrm{E}[Y_1\mid x,U_d=p] = x'\beta_1 +
+  \mathrm{E}[U_1\mid x,U_d=p]
+\end{equation*}
+\item Distribution of marginal potential outcomes
+  \begin{equation*}
+    f_{Y_1\mid X,U_d}(y\mid x,p)
+  \end{equation*}
+\end{enumerate}
+
+We did \#1 by
+\begin{itemize}
+\item Imposing linearity and separability
+\item Recovering $\hat{P}$ using sieves
+\item Recovering $\hat{\beta}$ using Robinson's partial linear
+  estimator
+\item Estimating the selection error by local polynomial regression
+\end{itemize}
+Now \#2...
+  
+\end{frame}
+
+\begin{frame}{Estimation: $f_{Y_1\mid X,U_d}(y\mid x,p)$}
+  \begin{itemize}
+\item Authors assume $X$ is independent of $U$, so 
+\begin{equation*}
+  f_{y_.|x,p}(y) = f_{u_.|p}(y-\mu_.(x,\beta_.))
+\end{equation*}
+%%% I could write this on the board if unclear
+
+\item From ID result:
+  \begin{equation*}
+    f_{u_.|p}(u) = p \frac{\partial}{\partial
+    p}f_{u_.|p,s=1}(u) + f_{u_.|p,s=1}(u)
+  \end{equation*}
+%%% If discrete use indicator, if cont use CDF and differentiate
+\item There is also a result that says kernel density estimation is
+  unbiased:
+  \begin{equation*}
+    \mathrm{E}\left[h^{-1}K\left(\frac{U_1-u}{h}\right)\mid P=p,
+      S=1\right]\xrightarrow[h \rightarrow 0]{} f_{U_1|P,S=1}(u\mid p)
+  \end{equation*}
+%%% Says that 
+\item So suggests to get density, we could estimate the conditional mean of
+  $h^{-1}K(.)$ locally (among those with $P=p$) among the treated 
+  \end{itemize}
+ $\rightarrow$ This is local polynomial regression again
+
+  
+\end{frame}
+
 
 
 \end{document}
