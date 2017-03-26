@@ -31,17 +31,69 @@
 \begin{frame}{Overview}
 
 % Nontechnical overview of big ideas
+\begin{itemize}
+
+\item Context: we know that the marginal treatment effect (MTE) can be
+  used to construct other treatment effects of interest
+\begin{itemize}
+\item MTE can be estimated using local instrumental variables
+\end{itemize}
+
+\pause
+
+\item Problem: simple treatment effects, like $\E(Y_1 - Y_0 | \dots)$,
+  might be too crude to properly assess policies
+\begin{itemize}
+\item Consider returns to college, which vary across the population
+
+\item Policy evaluation should care about the marginal enrollee, but
+  the marginal effect depends on who is already enrolled
+\end{itemize}
+
+\pause
+
+\item Satisfying answers require a way to estimate the distribution of
+  changes in potential outcomes
+\begin{itemize}
+\item This is the goal of Carneiro and Lee's paper
+\end{itemize}
+
+\end{itemize}
 
 \end{frame}
 
 
+
+
 \begin{frame}{Econometric Model} % Or framework, whichever is appropriate
 
-  % Show the outcome model and state that it is the same as the one in
-  % our MTE lecture.
+\begin{itemize}
 
-  % Mention a few assumptions, but only the ones that we will directly
-  % invoke (refer back to MTE lecture for others)
+\item Setting is almost identical to the one for MTEs
+
+\item $Y_i = \mu_i(X, U_i)$ for $i \in \{0, 1\}$
+
+\item Selection follows $D = \mathbb{I}[ \mu_D(Z) \geq U_D ]$
+
+\end{itemize}
+
+\pause
+
+\begin{enumerate}
+
+\item $\mu_D(Z)$ is nondegenerate conditional on $X$
+
+\item $(U_i, U_D) \perp Z | X$
+
+\item Distribution of $U_D$ is abs. continuous $\dots$
+
+\item Normalize unobservables so $U_i | X, Z \sim U[0, 1]$
+
+\pause
+
+\item $\E | G(Y_i) | < \infty$
+
+\end{enumerate}
 
 \end{frame}
 
@@ -49,7 +101,29 @@
 % Context for theorem 1: essential background on the MTE and local
 % instrumental variables to put the result in context
 \begin{frame}{Identification Context}
+
+\begin{itemize}
+
+% How does P(Z) connect to our notation?
+\item Local IV result:
+
+\begin{align*}
+  \frac{\partial \E \left( Y | X = x, P(Z) = p \right) }{\partial p} &= \Delta^{MTE}(x, p) \\
+  &= \E \left( Y_1 - Y_0 | X = x, U_d = u_d \right)
+\end{align*}
+
+% Comments on implications and estimation
+\pause
+
+\item Carneiro and Lee's contribution: generalize estimation of the
+  MTE to an arbitrary function $G(Y)$
+
+\end{itemize}
+
 \end{frame}
+
+
+
 
 
 % Shrink to make the math type just a bit smaller
@@ -72,20 +146,21 @@
 
 
 % Need text a bit smaller, so use the shrink parameter
+% Tutorial on using action and others in beamer: https://www.sharelatex.com/blog/2013/08/20/beamer-series-pt4.html
 \begin{frame}[shrink = 10]{Proof of Theorem}
 
 \begin{proof}
 \[
 \begin{aligned}
-\action<+->{\E [ G(Y) | &X = x, \mu_D(Z) = p, D = 1 ] = \E \left[ G(Y) | X = x, \mu_D(Z) = p, U_D < p \right] \\}
-\action<+->{&= \E \left[ G(Y_1) | X = x, \mu_D(Z) = p, U_D < p \right] = \E \left[ G(Y_1) | X = x, U_D < p \right] \\}
-\action<+->{&= \frac{1}{\Pr(U_D < p)} \int_0^p \E \left[ G(Y_1) | X = x, U_D = u_D \right] f_{U_D | X}(u_D | x) \diff u_D \\}
-\action<+->{&= \frac{1}{p} \int_0^p \E \left[ G(Y_1) | X = x, U_D = u_D \right] \int \underbrace{f_{U_D | X, Z}(u_D | x, z)}_{1} f_{Z|X}(z | x) \diff z \diff u_D \\}
-\action<+->{&= \frac{1}{p} \int_0^p \E \left[ G(Y_1) | X = x, U_D = u_D \right] \diff u_D \\}
+\action<1->{\E [ G(Y) | &X = x, \mu_D(Z) = p, D = 1 ] = \E \left[ G(Y) | X = x, \mu_D(Z) = p, U_D < p \right] \\}
+\action<1->{&= \E \left[ G(Y_1) | X = x, \mu_D(Z) = p, U_D < p \right] = \E \left[ G(Y_1) | X = x, U_D < p \right] \\}
+\action<2->{&= \frac{1}{\Pr(U_D < p)} \int_0^p \E \left[ G(Y_1) | X = x, U_D = u_D \right] f_{U_D | X}(u_D | x) \diff u_D \\}
+\action<3->{&= \frac{1}{p} \int_0^p \E \left[ G(Y_1) | X = x, U_D = u_D \right] \int \underbrace{f_{U_D | X, Z}(u_D | x, z)}_{1} f_{Z|X}(z | x) \diff z \diff u_D \\}
+\action<3->{&= \frac{1}{p} \int_0^p \E \left[ G(Y_1) | X = x, U_D = u_D \right] \diff u_D \\}
 \end{aligned}
 \]
 
-\action<+->{Conclude by differentiating both sides with respect to $p$.}
+\action<3->{Conclude by differentiating both sides with respect to $p$.}
 
 \end{proof}
 \end{frame}
@@ -93,6 +168,11 @@
 
 % Explain why the theorem matters
 \begin{frame}{Implications}
+\end{frame}
+
+
+% Construction of treatment effects from theorem 1
+\begin{frame}{Getting Treatment Effects}
 \end{frame}
 
 
