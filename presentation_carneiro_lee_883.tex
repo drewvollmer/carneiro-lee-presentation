@@ -16,7 +16,7 @@
 \mathchardef\mhyphen="2D % Create a hyphen for math mode
 \newcommand*\diff{\mathop{}\!d} % nicely formatted integral dx
 
-\usetheme{madrid}
+\usetheme{Madrid}
 
 \begin{document}
 
@@ -192,11 +192,24 @@ $$ \E\left( G(Y_1) - G(Y_0) | X = x, U_D = u_D \right) $$
 \end{frame}
 
 
+\begin{frame}{From identification to estimation}
+  \begin{itemize}
+  \item We have a theorem that says, given an instrument and monotonicity, for any $G(y)$,
+    \begin{multline*}
+      E[G(Y_1)\mid x, U_d=p] = \\ \E \left[ G(Y) | x, \mu_d(Z) = p, D = 1 \right] + p \frac{\partial}{\partial p} \E\left[ G(Y) |  x, \mu_d(Z) = p, D = 1 \right]
+    \end{multline*}
+  \item Suggests different $G(.)$ may be suited to different estimators
+    \item They will impose additional assumptions to make estimation feasible
+  \end{itemize}
+    $\rightarrow$ Estimation is not obvious, and depends on the empirical setting
+  
+  
+\end{frame}
 
 \begin{frame}{Estimation}
-Observe $\{Y,S,X,Z\}$ iid. Two objects of interest :
+  Two objects of interest :
 \begin{enumerate}
-\item Marginal potential outcomes---difference is MTE
+\item Marginal potential outcomes
 \begin{equation*}
   \mathrm{E}[Y_1\mid x,U_d=p]
 \end{equation*}
@@ -206,16 +219,15 @@ Observe $\{Y,S,X,Z\}$ iid. Two objects of interest :
   \end{equation*}
 \end{enumerate}
 \begin{itemize}
-\item The second builds on the first
-\item Empirical section is application of suggested estimators [I will
-  delete this, since it should be in overview]
+\item The second \textit{requires} the first.
 \end{itemize}
 
 \end{frame}
 
+
 \begin{frame}{Estimation: Marginal Potential Outcomes  }
   \begin{itemize}
-  \item Authors assume structure for $\mu_1$:
+  \item Authors assume linearity and separability for $\mu_1$:
     \begin{equation*}
       Y_1  = X'\beta_1 +  U_1
     \end{equation*}
@@ -223,21 +235,21 @@ Observe $\{Y,S,X,Z\}$ iid. Two objects of interest :
     \begin{equation*}
       \mathrm{E}[Y_1\mid x,U_d=p]  = x'\beta_1 +  \mathrm{E}[U_1\mid x,U_d=p]
     \end{equation*}
-\item The two terms are estimated separately
+\item The two terms are estimated separately - let's look at each in turn
   \end{itemize}
 \end{frame}
 
 \begin{frame}{Estimation:  Marginal Potential Outcomes, $\beta_1$}
   \begin{itemize}
-\item By the structural form:
+\item Take a different conditional expectation:
 \begin{equation*}
-  \mathrm{E}[Y_1\mid x, p,S=1] = x'\beta_1 +  \mathrm{E}[U_1\mid x,p,
-  S=1   ]
+  \mathrm{E}[Y_1\mid x, \mu_d=p,D=1] = x'\beta_1 +  \mathrm{E}[U_1\mid x,\mu_d=p,
+  D=1   ]
 \end{equation*}
-\item It can be shown $\mathrm{E}[U_1\mid x,p,
-  S=1   ]$ depends only on $p$. Say:
+\item It can be shown $\mathrm{E}[U_1\mid x,\mu_d=p,
+  D=1   ]$ depends only on $p$. Say:
   \begin{equation*}
-    \mathrm{E}[Y_1\mid x, p,S=1] = x'\beta_1 +  \lambda_1(p)
+    \mathrm{E}[Y_1\mid x, \mu_d=p,D=1] = x'\beta_1 +  \lambda_1(p)
   \end{equation*}
 %%%[The idea is that (z,x) drop out by independence, then Ud drops out
 %%%because its uniform.][Also ind of x not necessary]
@@ -245,27 +257,34 @@ Observe $\{Y,S,X,Z\}$ iid. Two objects of interest :
  \begin{equation*}
     Y_1 = x'\beta_1 +  \lambda_1(p) + \epsilon
   \end{equation*}
-%%%[Y=Y1 since we are among S=1]
-\item This is a `Partial Linear Model'! (The terms we care about are linear)
+%%%[Y=Y1 since we are among D=1]
+\item This is a `Partial Linear Model'!
 \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \begin{align*}
+  \mathrm{E}[U_1\mid x,\mu_d=p,
+  D=1   ] = \mathrm{E}[U_1\mid x, \mu_d=p, U_d < \mu_d    ] \\ = \mathrm{E}[U_1\mid  U_d < p    ] = \frac{1}{Pr(U_d<p)} \int_0^pE[U_1\mid \mu_d=s] ds
+\end{align*}
 \end{frame}
 
 \begin{frame}{Estimation:  Marginal Potential Outcomes, $\beta_1$}
   \begin{itemize}
-  \item Robinson (1988) has a estimator for this model
+  \item Robinson (1988) has an estimator for this model
 \item The idea is to
   `difference' away $\lambda(p)$
 %%%like in panel data:
   \begin{equation*}
-Y_1 - E[Y_1\mid p] = (x'-E[x\mid p])\beta_1 +  \cancel{\lambda_1(p) - \lambda_1(p)} + \eta
+Y_1 - E[Y_1\mid \mu_d=p] = (x'-E[x'\mid \mu_d=p])\beta_1 +  \cancel{\lambda_1(p) - \lambda_1(p)} + \eta
 \end{equation*}
 \item The estimation involves:
 \begin{enumerate}
-\item Estimate $\hat{P}$ non-parametrically
+\item Estimate ${p}$ non-parametrically
 %%%[use siepe regression: a power series approximation]
 \item Regress $Y$ on $\hat{p}$ and $X$ on $\hat{p}$, store the fitted values
-\item Then do OLS of $Y - E[Y\mid p]$ on $X -
-   E[X\mid p]$
+\item Then do OLS of $Y - E[Y\mid \hat{p}]$ on $X -
+   E[X\mid \hat{p}]$
 \end{enumerate}
   \end{itemize}
 
@@ -278,10 +297,10 @@ Y_1 - E[Y_1\mid p] = (x'-E[x\mid p])\beta_1 +  \cancel{\lambda_1(p) - \lambda_1(
     \end{equation*}
 \item Our sample is $\{\hat{U}_1= Y-\mu_1(x,\hat{\beta}_1), \hat{P},
   S\}$
-\item The ID argument replicates for $U_1$, so
+\item The ID theorem applies for $G(Y_1)=U_1$, so
 \begin{equation*}
   \mathrm{E}[U_1\mid U_d= p] = p \frac{\partial}{\partial
-    p}\mathrm{E}[U_1\mid P=p,S=1] + \mathrm{E}[U_1\mid P=p,S=1]
+    p}\mathrm{E}[U_1\mid P=p,D=1] + \mathrm{E}[U_1\mid P=p,D=1]
 \end{equation*}
 \item We can estimate the RHS with local polynomial regression
   \end{itemize}
@@ -329,7 +348,7 @@ interpretation that
 
 We did \#1 by
 \begin{itemize}
-\item Imposing linearity and separability
+\item Imposing linearity and separability, and independence of $X$
 \item Recovering $\hat{P}$ using sieves
 \item Recovering $\hat{\beta}$ using Robinson's partial linear
   estimator
@@ -341,15 +360,15 @@ Now \#2...
 
 \begin{frame}{Estimation: $f_{Y_1\mid X,U_d}(y\mid x,p)$}
   \begin{itemize}
-\item Authors assume $X$ is independent of $U$, so
+\item Authors assume $X$ is independent of $U_1,U_d$, so
 \begin{equation*}
-  f_{y_.|x,p}(y) = f_{u_.|p}(y-\mu_.(x,\beta_.))
+  f_{Y_1|x,\mu_d=p}(y) = f_{U_1|\mu_d=p}(y-\mu_1(x,\beta_1))
 \end{equation*}
 %%% I could write this on the board if unclear
 
-\item From ID result:
+\item From ID theorem:
   \begin{equation*}
-    f_{u_.|p}(u) = p \frac{\partial}{\partial
+    f_{u_1|p}(u) = p \frac{\partial}{\partial
     p}f_{u_.|p,s=1}(u) + f_{u_.|p,s=1}(u)
   \end{equation*}
 %%% If discrete use indicator, if cont use CDF and differentiate
@@ -357,7 +376,7 @@ Now \#2...
   unbiased:
   \begin{equation*}
     \mathrm{E}\left[h^{-1}K\left(\frac{U_1-u}{h}\right)\mid P=p,
-      S=1\right]\xrightarrow[h \rightarrow 0]{} f_{U_1|P,S=1}(u\mid p)
+      D=1\right]\xrightarrow[h \rightarrow 0]{} f_{U_1|P,D=1}(u\mid p)
   \end{equation*}
 %%% Says that
 \item So suggests to get density, we could estimate the conditional mean of
