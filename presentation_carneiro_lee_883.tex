@@ -45,21 +45,37 @@
 \item Problem: simple treatment effects, like $\E(Y_1 - Y_0 | \dots)$,
   might be too crude to properly assess policies
 \begin{itemize}
-\item Consider returns to college, which vary across the population
-
-\item Policy evaluation should care about the marginal enrollee, but
-  the marginal effect depends on who is already enrolled
+\item Policy design depends on marginal, not average, effects
 \end{itemize}
 
 \pause
 
-\item Satisfying answers require a way to estimate the distribution of
-  changes in potential outcomes
+\item It would be useful to estimate the expectation and distribution
+  of potential outcomes $Y_0$ and $Y_1$, not just $Y_1 - Y_0$
 \begin{itemize}
 \item This is the goal of Carneiro and Lee's paper
 \end{itemize}
 
 \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Overview, continued}
+
+\begin{enumerate}
+
+\item Identify marginal potential outcomes separately using a strategy
+  similar to local IV
+
+\item Use the identification result to propose estimators for marginal
+  potential outcomes and their distributions
+
+\item Discuss asymptotic properties of the estimators
+
+\item Empirical application: returns to college
+
+\end{enumerate}
 
 \end{frame}
 
@@ -90,11 +106,20 @@
 
 \item Normalize unobservables so $U_i | X, Z \sim U[0, 1]$
 
-\pause
-
-\item $\E | G(Y_i) | < \infty$
+\item $\E|Y_i| < \infty$ generalized to $\E | G(Y_i) | < \infty$
 
 \end{enumerate}
+
+\pause
+
+\begin{itemize}
+\item Assumptions are no stronger than those from class: only need a
+  valid instrument and a selection model, plus technical conditions
+\begin{itemize}
+\item To estimate, we'll need stronger assumptions
+\end{itemize}
+\end{itemize}
+
 
 \end{frame}
 
@@ -105,16 +130,31 @@
 
 \begin{itemize}
 
-% How does P(Z) connect to our notation?
+% P(Z) is the propensity score \mu_D(Z)
 \item Local IV result:
 
 \begin{align*}
-  \frac{\partial \E \left( Y | X = x, P(Z) = p \right) }{\partial p} &= \Delta^{MTE}(x, p) \\
+  \frac{\partial \E \left( Y | X = x, \mu_D(Z) = p \right) }{\partial p} &= \Delta^{MTE}(x, p) \\
   &= \E \left( Y_1 - Y_0 | X = x, U_d = u_d \right)
 \end{align*}
 
+
+\item Need a continuous instrument to get variation in the propensity
+  score
+\begin{itemize}
+\item Can only learn about the MTE on the support of the propensity
+  score
+\end{itemize}
+
+
 % Comments on implications and estimation
 \pause
+
+\item Local IV only tells us about the difference in potential
+  outcomes
+\begin{itemize}
+\item It would be valuable to learn about $Y_0$ and $Y_1$ separately
+\end{itemize}
 
 \item Carneiro and Lee's contribution: generalize estimation of the
   MTE to an arbitrary function $G(Y)$
@@ -148,22 +188,33 @@
 
 % Need text a bit smaller, so use the shrink parameter
 % Tutorial on using action and others in beamer: https://www.sharelatex.com/blog/2013/08/20/beamer-series-pt4.html
-\begin{frame}[shrink = 10]{Proof of Theorem}
-
+\begin{frame}{Proof of Theorem}
+\fontsize{10pt}{7.2}\selectfont
 \begin{proof}
 \[
 \begin{aligned}
 \action<1->{\E [ G(Y) | &X = x, \mu_D(Z) = p, D = 1 ] = \E \left[ G(Y) | X = x, \mu_D(Z) = p, U_D < p \right] \\}
-\action<1->{&= \E \left[ G(Y_1) | X = x, \mu_D(Z) = p, U_D < p \right] = \E \left[ G(Y_1) | X = x, U_D < p \right] \\}
-\only<1>{&\mathrm{Last\ step\ follows\ from} (Y_0, Y_1) \perp Z | X}
-\action<2->{&= \frac{1}{\Pr(U_D < p)} \int_0^p \E \left[ G(Y_1) | X = x, U_D = u_D \right] f_{U_D | X}(u_D | x) \diff u_D \\}
-\action<3->{&= \frac{1}{p} \int_0^p \E \left[ G(Y_1) | X = x, U_D = u_D \right] \int \underbrace{f_{U_D | X, Z}(u_D | x, z)}_{1} f_{Z|X}(z | x) \diff z \diff u_D \\}
-\action<3->{&= \frac{1}{p} \int_0^p \E \left[ G(Y_1) | X = x, U_D = u_D \right] \diff u_D \\}
+\action<1->{&= \E \left[ G(Y_1) | X = x, \alert<1>{\mu_D(Z) = p}, U_D < p \right] = \E \left[ G(Y_1) | X = x, U_D < p \right] \\}
+\action<1->{&\only<1>{\alert<1>{\mathrm{Removed\ because\ } (Y_0, Y_1) \perp Z|X.}}
+             \only<2->{= \frac{1}{\Pr(U_D < p)} \int_0^p \E \left[ G(Y_1) | X = x, U_D = u_D \right] \alert<2>{f_{U_D | X}(u_D | x)} \diff u_D} \\}
+\action<2->{&\only<2>{\alert<2>{f_{U_D|X}(u_D|x) = \E\left( f_{U_D|X, Z}(u_D | X = x, Z = z) | X = x \right) = \E(1 | X = x) = 1}}
+            \only<3->{= \frac{1}{p} \int_0^p \E \left[ G(Y_1) | X = x, U_D = u_D \right] \diff u_D } \\}
 \end{aligned}
 \]
 
-\action<3->{Conclude by differentiating both sides with respect to $p$.}
+\vspace{-.5cm}
+\action<4->{Next, differentiate with respect to $p$.}
+\vspace{-.25cm}
+\[
+\begin{aligned}
+\action<5->{\frac{\partial}{\partial p} \int_0^p \E \left[ G(Y_1) | X = x, U_D = u_D \right] \diff u_D &= \frac{\partial}{\partial p} p \E \left[ G(Y) | X = x, \mu_D(Z) = p, D = 1 \right] \\}
+\action<6->{\E \left[ G(Y_1) | X = x, U_D = p \right] &= \E \left[ G(Y) | X = x, \mu_D(Z) = p, D = 1 \right] \\}
+\action<6->{&+ p \frac{\partial \E \left[ G(Y) | X = x, \mu_D(Z) = p, D = 1 \right]}{\partial p} \\}
+\end{aligned}
+\]
 
+\vspace{-.75cm}
+\action<6->{Proof for $Y_0$ is analogous.}
 \end{proof}
 \end{frame}
 
@@ -173,22 +224,31 @@
 
 \begin{itemize}
 
-\item Recovers a general form of the MTE,
-$$ \E\left( G(Y_1) - G(Y_0) | X = x, U_D = u_D \right) $$
+\item Under general conditions, moments of potential outcomes are
+  identified
+\begin{itemize}
+\item $G(y) = y$ provides the MTE
 
-\item $G(y) = y$ gives the standard MTE and treatment effects
-\item $G(y) = \Pr(Y \leq y)$ gives the CDF and, eventually, quantile
-  treatment effects
+\item $G(y) = \mathbb{I} \left[ Y \leq y \right]$ provides the
+  distribution
+\end{itemize}
 
+\pause
+
+\item From the MTE, recover all standard treatment effects
+
+\item From the CDF, recover the density of potential outcomes
+% Quantile treatment effects?
+
+\pause
+
+\item The theorem also applies to unobservables
+\begin{itemize}
+\item The distribution of unobservables is also identified
+\end{itemize}
 
 \end{itemize}
 
-\end{frame}
-
-
-% Construction of treatment effects from theorem 1
-%%% Should this be a discussion of assumptions (valid instrument, full support) instead?
-\begin{frame}{Getting Treatment Effects}
 \end{frame}
 
 
