@@ -428,21 +428,21 @@ Now \#2...
 
 \item From ID theorem:
   \begin{equation*}
-    f_{u_1|p}(u) = p \frac{\partial}{\partial
-    p}f_{u_.|p,s=1}(u) + f_{u_.|p,s=1}(u)
+    f_{U_1|\mu_d=p}(u) = p \frac{\partial}{\partial
+    p}f_{U_1|\mu_d=p,D=1}(u) + f_{U_1|\mu_d=p,D=1}(u)
   \end{equation*}
 %%% If discrete use indicator, if cont use CDF and differentiate
-\item There is also a result that says kernel density estimation is
+\item There is also a result that says kernel density estimator is
   unbiased:
   \begin{equation*}
-    \mathrm{E}\left[h^{-1}K\left(\frac{U_1-u}{h}\right)\mid P=p,
-      D=1\right]\xrightarrow[h \rightarrow 0]{} f_{U_1|P,D=1}(u\mid p)
+    \mathrm{E}\left[h^{-1}K\left(\frac{U_1-u}{h}\right)\mid \mu_d=p,
+      D=1\right]\xrightarrow[h \rightarrow 0]{} f_{U_1|\mu_d=p,D=1}(u)
   \end{equation*}
 %%% Says that
-\item So suggests to get density, we could estimate the conditional mean of
-  $h^{-1}K(.)$ locally (among those with $P=p$) among the treated
+\item So conditional mean of
+  $h^{-1}K(.)$ locally (near $\mu_d(Z)=p$) among the treated approximates the density of potential outcomes
+  \item We saw local polynomials estimate conditional mean and derivatives
   \end{itemize}
- $\rightarrow$ This is local polynomial regression again
 
 
 \end{frame}
