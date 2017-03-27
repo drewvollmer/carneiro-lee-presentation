@@ -155,6 +155,7 @@
 \begin{aligned}
 \action<1->{\E [ G(Y) | &X = x, \mu_D(Z) = p, D = 1 ] = \E \left[ G(Y) | X = x, \mu_D(Z) = p, U_D < p \right] \\}
 \action<1->{&= \E \left[ G(Y_1) | X = x, \mu_D(Z) = p, U_D < p \right] = \E \left[ G(Y_1) | X = x, U_D < p \right] \\}
+\only<1>{&\mathrm{Last\ step\ follows\ from} (Y_0, Y_1) \perp Z | X}
 \action<2->{&= \frac{1}{\Pr(U_D < p)} \int_0^p \E \left[ G(Y_1) | X = x, U_D = u_D \right] f_{U_D | X}(u_D | x) \diff u_D \\}
 \action<3->{&= \frac{1}{p} \int_0^p \E \left[ G(Y_1) | X = x, U_D = u_D \right] \int \underbrace{f_{U_D | X, Z}(u_D | x, z)}_{1} f_{Z|X}(z | x) \diff z \diff u_D \\}
 \action<3->{&= \frac{1}{p} \int_0^p \E \left[ G(Y_1) | X = x, U_D = u_D \right] \diff u_D \\}
@@ -169,15 +170,30 @@
 
 % Explain why the theorem matters
 \begin{frame}{Implications}
-% So far we have: (1) can get distributions 
+
+\begin{itemize}
+
+\item Recovers a general form of the MTE,
+$$ \E\left( G(Y_1) - G(Y_0) | X = x, U_D = u_D \right) $$
+
+\item $G(y) = y$ gives the standard MTE and treatment effects
+\item $G(y) = \Pr(Y \leq y)$ gives the CDF and, eventually, quantile
+  treatment effects
+
+
+\end{itemize}
+
 \end{frame}
 
 
 % Construction of treatment effects from theorem 1
+%%% Should this be a discussion of assumptions (valid instrument, full support) instead?
 \begin{frame}{Getting Treatment Effects}
 \end{frame}
 
-\begin{frame}{Estimation} 
+
+
+\begin{frame}{Estimation}
 Observe $\{Y,S,X,Z\}$ iid. Two objects of interest :
 \begin{enumerate}
 \item Marginal potential outcomes---difference is MTE
@@ -194,7 +210,7 @@ Observe $\{Y,S,X,Z\}$ iid. Two objects of interest :
 \item Empirical section is application of suggested estimators [I will
   delete this, since it should be in overview]
 \end{itemize}
-  
+
 \end{frame}
 
 \begin{frame}{Estimation: Marginal Potential Outcomes  }
@@ -206,7 +222,7 @@ Observe $\{Y,S,X,Z\}$ iid. Two objects of interest :
 \item So we wish to estimate:
     \begin{equation*}
       \mathrm{E}[Y_1\mid x,U_d=p]  = x'\beta_1 +  \mathrm{E}[U_1\mid x,U_d=p]
-    \end{equation*} 
+    \end{equation*}
 \item The two terms are estimated separately
   \end{itemize}
 \end{frame}
@@ -219,7 +235,7 @@ Observe $\{Y,S,X,Z\}$ iid. Two objects of interest :
   S=1   ]
 \end{equation*}
 \item It can be shown $\mathrm{E}[U_1\mid x,p,
-  S=1   ]$ depends only on $p$. Say: 
+  S=1   ]$ depends only on $p$. Say:
   \begin{equation*}
     \mathrm{E}[Y_1\mid x, p,S=1] = x'\beta_1 +  \lambda_1(p)
   \end{equation*}
@@ -245,14 +261,14 @@ Y_1 - E[Y_1\mid p] = (x'-E[x\mid p])\beta_1 +  \cancel{\lambda_1(p) - \lambda_1(
 \end{equation*}
 \item The estimation involves:
 \begin{enumerate}
-\item Estimate $\hat{P}$ non-parametrically 
+\item Estimate $\hat{P}$ non-parametrically
 %%%[use siepe regression: a power series approximation]
 \item Regress $Y$ on $\hat{p}$ and $X$ on $\hat{p}$, store the fitted values
 \item Then do OLS of $Y - E[Y\mid p]$ on $X -
    E[X\mid p]$
 \end{enumerate}
   \end{itemize}
-  
+
 \end{frame}
 
 \begin{frame}{Estimation:  Marginal Potential Outcomes }
@@ -262,7 +278,7 @@ Y_1 - E[Y_1\mid p] = (x'-E[x\mid p])\beta_1 +  \cancel{\lambda_1(p) - \lambda_1(
     \end{equation*}
 \item Our sample is $\{\hat{U}_1= Y-\mu_1(x,\hat{\beta}_1), \hat{P},
   S\}$
-\item The ID argument replicates for $U_1$, so 
+\item The ID argument replicates for $U_1$, so
 \begin{equation*}
   \mathrm{E}[U_1\mid U_d= p] = p \frac{\partial}{\partial
     p}\mathrm{E}[U_1\mid P=p,S=1] + \mathrm{E}[U_1\mid P=p,S=1]
@@ -320,12 +336,12 @@ We did \#1 by
 \item Estimating the selection error by local polynomial regression
 \end{itemize}
 Now \#2...
-  
+
 \end{frame}
 
 \begin{frame}{Estimation: $f_{Y_1\mid X,U_d}(y\mid x,p)$}
   \begin{itemize}
-\item Authors assume $X$ is independent of $U$, so 
+\item Authors assume $X$ is independent of $U$, so
 \begin{equation*}
   f_{y_.|x,p}(y) = f_{u_.|p}(y-\mu_.(x,\beta_.))
 \end{equation*}
@@ -343,13 +359,13 @@ Now \#2...
     \mathrm{E}\left[h^{-1}K\left(\frac{U_1-u}{h}\right)\mid P=p,
       S=1\right]\xrightarrow[h \rightarrow 0]{} f_{U_1|P,S=1}(u\mid p)
   \end{equation*}
-%%% Says that 
+%%% Says that
 \item So suggests to get density, we could estimate the conditional mean of
-  $h^{-1}K(.)$ locally (among those with $P=p$) among the treated 
+  $h^{-1}K(.)$ locally (among those with $P=p$) among the treated
   \end{itemize}
  $\rightarrow$ This is local polynomial regression again
 
-  
+
 \end{frame}
 
 
