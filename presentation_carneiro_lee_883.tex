@@ -65,8 +65,8 @@
 
 \begin{enumerate}
 
-\item Identify marginal potential outcomes separately using a strategy
-  similar to local IV
+\item Identify functions of marginal potential outcomes using a
+  strategy similar to local IV
 
 \item Use the identification result to propose estimators for marginal
   potential outcomes and their distributions
@@ -177,9 +177,9 @@
 \vspace{-.25cm}
 \begin{align*}
   \E\left[ G(Y_1) | X = x, U_D = p \right] = &\E \left[ G(Y) | X = x, \mu_D(Z) = p, D = 1 \right] \\
-  &+ p \frac{\partial \E\left[ G(Y) | X = x, \mu_D(Z) = p, S = 1 \right]}{\partial p} \\
+  &+ p \frac{\partial \E\left[ G(Y) | X = x, \mu_D(Z) = p, D = 1 \right]}{\partial p} \\
   \E\left[ G(Y_0) | X = x, U_D = p \right] = &\E \left[ G(Y) | X = x, \mu_D(Z) = p, D = 0 \right] \\
-  &- (1 - p) \frac{\partial \E\left[ G(Y) | X = x, \mu_D(Z) = p, S = 0 \right]}{\partial p} \\
+  &- (1 - p) \frac{\partial \E\left[ G(Y) | X = x, \mu_D(Z) = p, D = 0 \right]}{\partial p} \\
 \end{align*}
 \end{theorem}
 
@@ -237,8 +237,8 @@
 
 \item From the MTE, recover all standard treatment effects
 
-\item From the CDF, recover the density of potential outcomes
-% Quantile treatment effects?
+\item From the CDF, recover the density of potential outcomes and
+  quantile treatment effects
 
 \pause
 
@@ -262,8 +262,8 @@
     \item They will impose additional assumptions to make estimation feasible
   \end{itemize}
     $\rightarrow$ Estimation is not obvious, and depends on the empirical setting
-  
-  
+
+
 \end{frame}
 
 \begin{frame}{Estimation}
@@ -356,7 +356,7 @@ Y_1 - E[Y_1\mid \mu_d=p] = (x'-E[x'\mid \mu_d=p])\beta_1 +  \cancel{\lambda_1(p)
       \mathrm{E}[Y_1\mid x,U_d=p]  = x'\beta_1 +  \mathbf{\mathrm{\mathbf{E}}[U_1\mid x,U_d=p]}
     \end{equation*}
 \item Our sample is $\{\hat{U}_1= Y-\mu_1(x,\hat{\beta}_1), \hat{P},
-  S\}$
+  D\}$
 \item The ID theorem applies for $G(Y_1)=U_1$, so
 \begin{equation*}
   \mathrm{E}[U_1\mid U_d= p] = p \frac{\partial}{\partial
