@@ -48,7 +48,7 @@
 \item What if we want to know about the distribution of $Y_1 - Y_0$,
   or the levels of potential outcomes?
 
-\pause
+---\pause
 
 \item This is the goal of Carneiro and Lee's paper
 \end{itemize}
@@ -256,13 +256,12 @@
 \begin{frame}{From identification to estimation}
   \begin{itemize}
   \item We have a theorem that says, given an instrument and monotonicity, for any $G(y)$,
-    \begin{multline*}
-      E[G(Y_1)\mid x, U_d=p] = \\ \E \left[ G(Y) | x, \mu_d(Z) = p, D = 1 \right] + p \frac{\partial}{\partial p} \E\left[ G(Y) |  x, \mu_d(Z) = p, D = 1 \right]
-    \end{multline*}
-  \item Suggests different $G(.)$ may be suited to different estimators
+    \begin{align*}
+      E[G(Y_1)\mid x, U_d=p] =   p \frac{\partial}{\partial p} \E\left[ G(Y) |  x, \mu_d(Z) = p, D = 1 \right] \\+  \E \left[ G(Y) | x, \mu_d(Z) = p, D = 1 \right] 
+    \end{align*}
+  \item RHS form is complicated
     \item They will impose additional assumptions to make estimation feasible
   \end{itemize}
-    $\rightarrow$ Estimation is not obvious, and depends on the empirical setting
 
 
 \end{frame}
@@ -316,25 +315,18 @@
 %%%because its uniform.][Also ind of x not necessary]
 \item If define mean zero errors $\epsilon_i$, this can be written as:
  \begin{equation*}
-    Y_1 = x'\beta_1 +  \lambda_1(p) + \epsilon
+    Y_1 = \underbrace{x'\beta_1 +  \lambda_1(p)}_{\mathrm{E}[Y_1\mid x, \mu_d=p,D=1]} + \epsilon
   \end{equation*}
 %%%[Y=Y1 since we are among D=1]
-\item This is a `Partial Linear Model'!
+\item This is a `Partial Linear Model'
 \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \begin{align*}
-  \mathrm{E}[U_1\mid x,\mu_d=p,
-  D=1   ] = \mathrm{E}[U_1\mid x, \mu_d=p, U_d < \mu_d    ] \\ = \mathrm{E}[U_1\mid  U_d < p    ] = \frac{1}{Pr(U_d<p)} \int_0^pE[U_1\mid \mu_d=s] ds
-\end{align*}
 \end{frame}
 
 \begin{frame}{Estimation:  Marginal Potential Outcomes, $\beta_1$}
   \begin{itemize}
   \item Robinson (1988) has an estimator for this model
 \item The idea is to
-  `difference' away $\lambda(p)$
+  `difference away' $\lambda(p)$
 %%%like in panel data:
   \begin{equation*}
 Y_1 - E[Y_1\mid \mu_d=p] = (x'-E[x'\mid \mu_d=p])\beta_1 +  \cancel{\lambda_1(p) - \lambda_1(p)} + \eta
@@ -344,8 +336,8 @@ Y_1 - E[Y_1\mid \mu_d=p] = (x'-E[x'\mid \mu_d=p])\beta_1 +  \cancel{\lambda_1(p)
 \item Estimate ${p}$ non-parametrically
 %%%[use siepe regression: a power series approximation]
 \item Regress $Y$ on $\hat{p}$ and $X$ on $\hat{p}$, store the fitted values
-\item Then do OLS of $Y - E[Y\mid \hat{p}]$ on $X -
-   E[X\mid \hat{p}]$
+\item Then do OLS of $Y_i - E[Y\mid \hat{p}_i]$ on $X_i -
+   E[X\mid \hat{p}_i]$
 \end{enumerate}
   \end{itemize}
 
@@ -356,38 +348,38 @@ Y_1 - E[Y_1\mid \mu_d=p] = (x'-E[x'\mid \mu_d=p])\beta_1 +  \cancel{\lambda_1(p)
   \item Now for the second bit: \begin{equation*}
       \mathrm{E}[Y_1\mid x,U_d=p]  = x'\beta_1 +  \mathbf{\mathrm{\mathbf{E}}[U_1\mid x,U_d=p]}
     \end{equation*}
-\item Our sample is $\{\hat{U}_1= Y-\mu_1(x,\hat{\beta}_1), \hat{P},
+\item Our sample is $\{\hat{U}_1= Y-x'\hat{\beta}_1, \hat{P},
   D\}$
-\item The ID theorem applies for $G(Y_1)=U_1$, so
+\item The ID argument applies to $U_1$, so
 \begin{equation*}
   \mathrm{E}[U_1\mid U_d= p] = p \frac{\partial}{\partial
-    p}\mathrm{E}[U_1\mid P=p,D=1] + \mathrm{E}[U_1\mid P=p,D=1]
+    p}\mathrm{E}[U_1\mid \mu_d=p,D=1] + \mathrm{E}[U_1\mid \mu_d=p,D=1]
 \end{equation*}
-\item We can estimate the RHS with local polynomial regression
+\item The np technique `local polynomial' regression estimates conditional means and their derivatives
   \end{itemize}
 
 \end{frame}
 
 \begin{frame}{Estimation:  Marginal Potential Outcomes,
     $\mathrm{E}[U_1\mid U_d=p]$}
-    \begin{itemize}
-  \item LP regression is like LS weighting obserations close to $\hat{P}=p$
+  \begin{itemize}
+    \item Want to estimate mean of $U_1$ and its derivative conditional on ${\mu}_d=p$
+  \item LP regression is like LS weighting obserations close to ${\mu}_d=p$
 %%% [``locally'']
 \item For example, solve
   \begin{equation*}
    \min_{\gamma_1,\gamma_2} \left\{ \sum_i\left[\hat{U}_{1i}-(\gamma_1 +
-      \gamma_2(\hat{P}_i-p))\right]^2\mathrm{1}{\bigl(|\hat{P}_i - p| \le h\bigr)}\right\}
+      \gamma_2(\hat{\mu}_{di}-p))\right]^2\mathrm{1}{\bigl(|\hat{\mu}_{di} - p| \le h\bigr)}\right\}
   \end{equation*}
 %%% [I've told you what it is, now I'll give you motivation]
 \item Why? Think of a taylor series of $E[\hat{U}_{1}|
- \hat{P}=\hat{P}_i]$
-  about $\hat{P} = p$
+ \hat{\mu}_{d}=\hat{\mu}_{di}]$
+  about $\hat{\mu}_d = p$
   \begin{equation*}
-    E[\hat{U}_{1}\mid \hat{P}_i] \approx E[\hat{U}_{1}\mid p] +
-    \frac{\partial}{\partial p} E[\hat{U}_{1}\mid p] (\hat{P}_i-p)
+    E[\hat{U}_{1}\mid \hat{\mu}_{di}] \approx E[\hat{U}_{1}\mid p] +
+    \frac{\partial}{\partial p} E[\hat{U}_{1}\mid p] (\hat{\mu}_{di}-p)
   \end{equation*}
-With equality as $p \rightarrow \hat{P}_i$. This justifies
-interpretation that
+This justifies interpretation that
 \begin{eqnarray*}
   \hat{\gamma}_1 = \hat{E}[\hat{U}_{1}\mid p] & & \hat{\gamma}_2 = \frac{\partial}{\partial p} \hat{E}[\hat{U}_{1}\mid p]
 \end{eqnarray*}
@@ -421,33 +413,69 @@ Now \#2...
 
 \begin{frame}{Estimation: $f_{Y_1\mid X,U_d}(y\mid x,p)$}
   \begin{itemize}
-\item Authors assume $X$ is independent of $U_1,U_d$, so
+\item Distribution of $Y_1$ is shifted distribution of $U_1$ (since  $X \perp U_1,U_d$):
 \begin{equation*}
-  f_{Y_1|x,\mu_d=p}(y) = f_{U_1|\mu_d=p}(y-\mu_1(x,\beta_1))
+  f_{Y_1|x,\mu_d=p}(y) = f_{U_1|\mu_d=p}(y-x'\beta_1)
 \end{equation*}
 %%% I could write this on the board if unclear
 
-\item From ID theorem:
+\item ID theorem applies to $G(U_1)=1(U_1=u)$, so that
   \begin{equation*}
     f_{U_1|\mu_d=p}(u) = p \frac{\partial}{\partial
     p}f_{U_1|\mu_d=p,D=1}(u) + f_{U_1|\mu_d=p,D=1}(u)
   \end{equation*}
 %%% If discrete use indicator, if cont use CDF and differentiate
-\item There is also a result that says kernel density estimator is
-  unbiased:
+\item A result that says kernel density estimators are unbiased:
   \begin{equation*}
     \mathrm{E}\left[h^{-1}K\left(\frac{U_1-u}{h}\right)\mid \mu_d=p,
       D=1\right]\xrightarrow[h \rightarrow 0]{} f_{U_1|\mu_d=p,D=1}(u)
   \end{equation*}
+  
+$\rightarrow$ conditional mean of
+  $h^{-1}K(\cdot)$ approximates the dist'n of potential outcomes
+
 %%% Says that
-\item So conditional mean of
-  $h^{-1}K(.)$ locally (near $\mu_d(Z)=p$) among the treated approximates the density of potential outcomes
   \item We saw local polynomials estimate conditional mean and derivatives
   \end{itemize}
 
+\end{frame}
 
+\begin{frame}{Next steps}
+  \begin{itemize}
+  \item Have estimators for
+    \begin{eqnarray*}
+  \mathrm{E}[Y_1\mid x,U_d=p] &   & f_{Y_1\mid X,U_d}(y\mid x,p)
+    \end{eqnarray*}
+    \item Had to assume
+    \begin{itemize}
+    \item Potential outcomes are linear in $X$ and have separable unobservables
+    \item Monotonicity, an instrument that is continuous
+      \item Also exogeneity of $X$, but this is mainly for interesting results --- with assumption need $supp(\mu_d(X,Z))=[0,1]$, not $supp(\mu_d(X|Z)=[0,1])$
+    \end{itemize}
+  \item Authors then derive asymptotic dist'ns (skip)
+  \item Application: selection into college
+    \begin{itemize}
+      \item looks at white males in four waves of NLSY
+      \item What can we do that we couldn't before?
+    \end{itemize}
+  \end{itemize}  
 \end{frame}
 
 
+\begin{frame}{}{}
+  [Image of summary statistics for one year]
+\end{frame}
+
+\begin{frame}{}{}
+  [Image of fig3 \& fig2]
+  Standard MTE plot, but with decomp. Solid line shows positive sorting on the gain, but mostly due to comp adv of non-college in non-college
+  fig2 is like MTE plot but across abilities. shows higher ab means better college outcomes, but not nec better non-college
+\end{frame}
+
+
+\begin{frame}{}{}
+  [fig5]
+  Shows quantiles of U1 for different values of v -- that is, how unobserved determinant of college outcomes changes in selection unobservable. Shows more likely to college have less variation in unobs outcomes, and these are lower
+\end{frame}
 
 \end{document}
