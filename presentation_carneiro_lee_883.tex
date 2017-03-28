@@ -43,16 +43,13 @@
 \pause
 
 \item Problem: simple treatment effects, like $\E(Y_1 - Y_0 | \dots)$,
-  might be too crude to properly assess policies
+  might not tell us much
 \begin{itemize}
-\item Policy design depends on marginal, not average, effects
-\end{itemize}
+\item What if we want to know about the distribution of $Y_1 - Y_0$,
+  or the levels of potential outcomes?
 
 \pause
 
-\item It would be useful to estimate the expectation and distribution
-  of potential outcomes $Y_0$ and $Y_1$, not just $Y_1 - Y_0$
-\begin{itemize}
 \item This is the goal of Carneiro and Lee's paper
 \end{itemize}
 
@@ -76,6 +73,12 @@
 \item Empirical application: returns to college
 
 \end{enumerate}
+
+\pause
+
+\begin{itemize}
+\item We focus on identification and estimation
+\end{itemize}
 
 \end{frame}
 
@@ -152,9 +155,6 @@
 
 \item Local IV only tells us about the difference in potential
   outcomes
-\begin{itemize}
-\item It would be valuable to learn about $Y_0$ and $Y_1$ separately
-\end{itemize}
 
 \item Carneiro and Lee's contribution: generalize estimation of the
   MTE to an arbitrary function $G(Y)$
@@ -227,18 +227,19 @@
 \item Under general conditions, moments of potential outcomes are
   identified
 \begin{itemize}
-\item $G(y) = y$ provides the MTE
+\item $G(y) = y$ gives potential outcomes and, by extension, the MTE
 
-\item $G(y) = \mathbb{I} \left[ Y \leq y \right]$ provides the
+\item $G(y) = \mathbb{I} \left[ Y \leq y \right]$ gives the
   distribution
 \end{itemize}
 
 \pause
 
-\item From the MTE, recover all standard treatment effects
+\item Using appropriate weights, recover various moments of $Y_i$ and
+  the distribution $F_{Y_i}(\cdot)$
 
-\item From the CDF, recover the density of potential outcomes and
-  quantile treatment effects
+\item Unlike local IV, this tells us about the individual potential
+  outcomes and quantile treatment effects
 
 \pause
 
