@@ -261,7 +261,7 @@
       E[G(Y_1)\mid x, U_d=p] =   p \frac{\partial}{\partial p} \E\left[ G(Y) |  x, \mu_d(Z) = p, D = 1 \right] \\+  \E \left[ G(Y) | x, \mu_d(Z) = p, D = 1 \right] 
     \end{align*} \pause
   \item RHS form is complicated
-    \item They will impose additional assumptions to make estimation feasible
+    \item Authors impose additional assumptions to make estimation feasible
   \end{itemize}
 
 
@@ -278,7 +278,7 @@
   \begin{equation*}
     f_{Y_1\mid X,U_d}(y\mid x,U_d=p)
   \end{equation*}
-\end{enumerate}
+\end{enumerate} \pause
 \begin{itemize}
 \item The second \textit{requires} the first.
 \end{itemize}
@@ -372,6 +372,7 @@ Y_1 - E[Y_1\mid \mu_d=p] = (x'-E[x'\mid \mu_d=p])\beta_1 +  \cancel{\lambda_1(p)
     E[\hat{U}_{1}\mid \hat{\mu}_{di}] \approx E[\hat{U}_{1}\mid p] +
     \frac{\partial}{\partial p} E[\hat{U}_{1}\mid p] (\hat{\mu}_{di}-p)
   \end{equation*} \pause
+This justifies the interpretation that:
 \begin{eqnarray*}
   \hat{\gamma}_1 = \hat{E}[\hat{U}_{1}\mid p] & & \hat{\gamma}_2 = \frac{\partial}{\partial p} \hat{E}[\hat{U}_{1}\mid p]
 \end{eqnarray*}
